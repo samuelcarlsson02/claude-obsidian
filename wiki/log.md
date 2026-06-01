@@ -25,6 +25,45 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-06-01] maintenance | KB-layer refresh to v1.9.2
+- Type: meta reconciliation (no code change)
+- Reason: hot.md / index.md / log.md had drifted. They stopped tracking at v1.7.1 (2026-05-17) while the plugin shipped through v1.9.2 (public 2026-05-28). The plugin compounded; the wiki documenting the plugin fell behind.
+- Locations (modified): `wiki/hot.md` (full rewrite to v1.9.2 public-canonical reality), `wiki/index.md` (date 2026-04-15 → 2026-06-01, page count 34 → 49, added plugin-version line, added References section for `[[methodology-modes]]` + `[[transport-fallback]]` which existed on disk but were uncatalogued), `wiki/log.md` (this entry + the five v1.8 → v1.9.2 entries below, back-filled from git history)
+- Source of truth: git log + CHANGELOG.md + commit bodies. All entries below are reconstructed from commits, not invented.
+
+## [2026-05-28] release | v1.9.2 promoted to public canonical (`00213b7`)
+- Type: release framing + SSS+ polish + SEO/GEO pass
+- Public build `AgriciDaniel/claude-obsidian` is now the default install everywhere; Pro repositioned as early-access. Install slug corrected to `claude-obsidian@agricidaniel-claude-obsidian` (verified against `claude plugin list`).
+- Added SSS+ files: CITATION.cff, PRIVACY.md, CODEOWNERS, .github/FUNDING.yml. marketplace.json moved to public form, passes `claude plugin validate` clean.
+- SEO/GEO pass (DataForSEO-backed): H1 leads with "Self-Organizing AI Second Brain"; 4 verbatim GEO Q&As added to FAQ for AI Overview + Perplexity citation. No keyword stuffing.
+- Gates: secret scan clean (tree + 55-commit history), `make test` 9/9 suites, plugin validate clean, fresh verifier agent SHIP (0 BLOCKER / 0 HIGH).
+
+## [2026-05-27] release | v1.9.2 prompt-cache hardening + path-handling robustness (`73616fa`)
+- Type: feature + fix (the only Anthropic API call site: `scripts/contextual-prefix.py`)
+- Caching: attach `cache_control` only above the Haiku 4.5 floor (`HAIKU_CACHE_MIN_CHARS = 16384`, ~4096 tokens); below it the API ignores the marker, so the prior unconditional marker was a misleading no-op. Extracted as pure `cache_control_for()`. Added integer-only cache telemetry (`cache: wrote=N read=N tok`, never page content, preserving the v1.7.1 data-egress posture) + a sequential-loop invariant note guarding against future parallelization zeroing cache reads.
+- Path handling: explicit missing path now exits 3 (was: silent exit 0); out-of-vault path exits 2 with a message (was: raw ValueError traceback). `--all` unaffected. Removed dead `EXIT_NO_ADDRESS` constant; renamed shadowed `prefix` → `progress`.
+- Tests: replaced a tautological test with a mocked payload-shape integration test. `make test` = 9 suites green.
+
+## [2026-05-18] release | v1.9.1 single-tenant threat model + hook/data hardening (`5cdfecf`)
+- Type: docs (security) + defensive hardening
+- SECURITY.md gains a "Threat model: single-tenant vault" section documenting three intentional design choices with shared-host mitigations: (1) unconditional `wiki-lock.sh` release (restrict perms on `.vault-meta/locks/`), (2) PostToolUse auto-commit runs as the invoking user (per-vault opt-out via `touch .vault-meta/auto-commit.disabled`), (3) cross-process access governed by filesystem permissions, not application-layer identity.
+- Hardening batch: atomic chunk writes via tmp+rename, pathspec-scoped auto-commit (prevents blast radius), SessionStart stale-lock reaper + PostToolUse opt-out gate, symlink canon in wiki-lock, rerank hook.log routing, setup-retrieve ollama-localhost assert.
+- Closed 6 of 6 remaining HIGH/MEDIUM + 3 LOW from the v1.9.0 pre-public-promotion audit. Score 91.6 → ~94 raw average. Ship verdict GREEN.
+
+## [2026-05-18] release | v1.9.0 audit closure + 10-principle framework + org migration (`209aad9`)
+- Type: feature + repo hygiene + URL migration (folds in v1.8.2 pre-push fixes)
+- 10-principle thinking framework: NEW `skills/think/SKILL.md` (skill #15), the canonical OBSERVE-OBSERVE-LISTEN-THINK-CONNECT-CONNECT-FEEL-ACCEPT-CREATE-GROW loop. A unique "How to think (10-principle mapping)" appendix added to all 14 existing SKILL.md files (not template stubs).
+- First public-release hygiene: NEW CONTRIBUTING.md, CODE_OF_CONDUCT.md (Contributor Covenant v2.1), SECURITY.md, .github issue/PR templates, and `.github/workflows/test.yml` CI (make test + SKILL frontmatter validation + agent tools-declaration check + manifest JSON validity).
+- v1.8.2 pre-push fixes (all 4 HIGH): transport `manual_override` round-trips through `--force`; wiki-ingest gains Bash tool + Mode awareness; autoresearch web-egress hygiene section; save Step 0 destination decision.
+- URL migration: 20 files updated, repository URL `AgriciDaniel` → `AI-Marketing-Hub` (author attribution preserved as AgriciDaniel). All 8 test suites green (~1234 assertions) at this release; contextual suite added in v1.9.2 brought it to 9.
+
+## [2026-05-17] release | v1.8.0 methodology modes — closes compass priority gap 5 (`dbba1da`, `40a96e7`)
+- Type: feature (skill #14) + v1.8.1 ship-gate fixes
+- NEW `skills/wiki-mode/SKILL.md`: reads `.vault-meta/mode.json`, defaults to "generic" (v1.7 behavior byte-for-byte) when absent. Four modes: generic, LYT (MOCs + atomic notes), PARA (Projects/Areas/Resources/Archives), Zettelkasten (timestamped IDs, flat, dense linking).
+- NEW `scripts/wiki-mode.py`: pure-stdlib router. Subcommands get / config / route <type> <name> / set <mode> / id / templates. Single source of truth for where new content is filed; no special-casing in consumer skills (wiki-ingest, save, autoresearch consult it).
+- NEW `bin/setup-mode.sh` (interactive + `--mode` flag), 6 per-mode templates, `tests/test_wiki_mode.py` (15 hermetic assertions, `make test` now 8 suites), `docs/methodology-modes-guide.md`, `wiki/references/methodology-modes.md`.
+- Closes the 5th and final priority gap from the May 2026 compass artifact. #1 on 5/7 compass axes (up from 4/7 in v1.7). v1.8.1 (`40a96e7`) closed 4 items from the v1.8.0 ship-gate dispatch.
+
 ## [2026-04-24] save | v1.6.0 public release notes (Teams, Karpathy-style)
 - Type: release doc + visual assets
 - Locations (new): `docs/releases/v1.6.0.md` (346 lines, 6 sections, Karpathy-style prose), `wiki/meta/dragonscale-mechanism-overview.svg` (4-mechanism diagram with shared .vault-meta/ gate), `wiki/meta/dragonscale-6-test-flow.svg` (validation timeline), `wiki/meta/dragonscale-frontier-graph.svg` (M4 candidate + 3 filed pages)
