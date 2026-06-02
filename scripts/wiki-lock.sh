@@ -147,15 +147,46 @@ is_alive() {
   kill -0 "$1" 2>/dev/null
 }
 
+# flock(1) is preferred but unavailable on some platforms — notably Git for
+# Windows / MSYS2, which ship no util-linux flock. Set VAULT_LOCK_NO_FLOCK=1 to
+# force the portable mkdir fallback (lets flock-capable CI exercise it too).
+_use_flock() { [ -z "${VAULT_LOCK_NO_FLOCK:-}" ] && command -v flock >/dev/null 2>&1; }
+
 # Atomic meta-lock wrapper. Funcs that mutate LOCK_DIR call under this lock so
-# acquire/release/clear-stale don't race against each other.
+# acquire/release/clear-stale don't race against each other. The meta lock is
+# short-lived per command.
 with_meta_lock() {
   ensure_dirs
-  # Use flock under bash's redirect; meta lock is short-lived per command.
-  (
-    flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
-    "$@"
-  ) 9>"$META_LOCK"
+  if _use_flock; then
+    # Use flock under bash's redirect; auto-releases when the subshell exits.
+    (
+      flock -x -w 5 9 || die "could not acquire meta-lock within 5s" 1
+      "$@"
+    ) 9>"$META_LOCK"
+  else
+    # Portable fallback: atomic mkdir spinlock with an age-based stale reaper
+    # (mirrors this script's per-file age philosophy). Released via EXIT trap so
+    # a die() inside "$@" still frees the meta lock.
+    # Hot path stays cheap (bare mkdir + sleep); the fork-heavy stale check runs
+    # only ~once a second so heavy contention can't starve waiters. Budget is
+    # generous because it only spins when contended.
+    local md="${META_LOCK}.d" waited=0 now mt rc=0
+    while ! mkdir "$md" 2>/dev/null; do
+      waited=$((waited + 1))
+      if [ $((waited % 20)) -eq 0 ] && [ -d "$md" ]; then
+        now=$(date +%s 2>/dev/null || echo 0)
+        mt=$(stat -c %Y "$md" 2>/dev/null || stat -f %m "$md" 2>/dev/null || echo "$now")
+        [ "$((now - mt))" -ge 30 ] && rm -rf "$md" 2>/dev/null && continue
+      fi
+      [ "$waited" -ge 600 ] && die "could not acquire meta-lock" 1
+      sleep 0.05
+    done
+    trap 'rm -rf "$md" 2>/dev/null' EXIT
+    "$@" || rc=$?
+    rm -rf "$md" 2>/dev/null
+    trap - EXIT
+    return $rc
+  fi
 }
 
 read_lockfile() {

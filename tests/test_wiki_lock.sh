@@ -143,8 +143,20 @@ RC_NL=$( (wl acquire $'wiki/concepts/Foo\nbar.md' >/dev/null 2>&1); echo $? )
 assert_eq "acquire newline path rejected" "4" "$RC_NL"
 
 # ── path validation: carriage return rejected (v1.7.2; closes audit M4) ──────
-RC_CR=$( (wl acquire $'wiki/concepts/Foo\rbar.md' >/dev/null 2>&1); echo $? )
-assert_eq "acquire carriage-return path rejected" "4" "$RC_CR"
+# On MSYS/MinGW/Cygwin (Git for Windows) the shell strips lone CR bytes from
+# child-process argv during marshaling, so the byte never reaches the script and
+# the path it sees is valid (LF survives, only CR is stripped). validate_path's
+# CR rejection is still correct — exercised on POSIX, and verified directly — so
+# assert it only where a CR can actually survive argv.
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*)
+    echo "SKIP acquire carriage-return path rejected (MSYS strips CR from child argv)"
+    ;;
+  *)
+    RC_CR=$( (wl acquire $'wiki/concepts/Foo\rbar.md' >/dev/null 2>&1); echo $? )
+    assert_eq "acquire carriage-return path rejected" "4" "$RC_CR"
+    ;;
+esac
 
 # ── stress: 10 unique paths all acquire cleanly ──────────────────────────────
 for i in $(seq 1 10); do

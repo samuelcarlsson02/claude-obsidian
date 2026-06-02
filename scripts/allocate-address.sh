@@ -31,11 +31,46 @@ mkdir -p "$(dirname "$COUNTER_FILE")" || {
   exit 2
 }
 
-# Acquire exclusive lock with 5-second timeout. Release automatically on scope exit.
-exec 9>"$LOCK_FILE"
-if ! flock -x -w 5 9; then
-  echo "ERR: could not acquire address allocator lock within 5s" >&2
-  exit 1
+# Acquire an exclusive lock with a ~5-second timeout.
+#
+# flock(1) is preferred (kernel-level, auto-releases when the process exits),
+# but it is unavailable on some platforms — notably Git for Windows / MSYS2,
+# which ship no util-linux flock. There we fall back to an atomic mkdir
+# spinlock (mkdir is atomic on every POSIX-ish filesystem) with an age-based
+# stale reaper so a crashed holder can't deadlock the vault, released via an
+# EXIT trap. Set VAULT_LOCK_NO_FLOCK=1 to force the fallback (lets
+# flock-capable CI exercise the portable path).
+LOCK_DIR="${VAULT_ROOT}/.vault-meta/.address.lock.d"
+
+_use_flock() { [ -z "${VAULT_LOCK_NO_FLOCK:-}" ] && command -v flock >/dev/null 2>&1; }
+
+if _use_flock; then
+  exec 9>"$LOCK_FILE"
+  if ! flock -x -w 5 9; then
+    echo "ERR: could not acquire address allocator lock within 5s" >&2
+    exit 1
+  fi
+else
+  # Keep the spin hot path cheap: a bare mkdir + sleep. The stale-reaper check
+  # forks date+stat, which is costly (especially on MSYS), so only run it every
+  # ~1s rather than every iteration — otherwise heavy same-lock contention can
+  # starve waiters. The budget is generous because it only spins when contended;
+  # an uncontended caller wins the first mkdir and never sleeps.
+  _waited=0
+  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+    _waited=$((_waited + 1))
+    if [ $((_waited % 20)) -eq 0 ] && [ -d "$LOCK_DIR" ]; then
+      _now=$(date +%s 2>/dev/null || echo 0)
+      _mt=$(stat -c %Y "$LOCK_DIR" 2>/dev/null || stat -f %m "$LOCK_DIR" 2>/dev/null || echo "$_now")
+      if [ "$((_now - _mt))" -ge 30 ]; then rm -rf "$LOCK_DIR" 2>/dev/null; continue; fi
+    fi
+    if [ "$_waited" -ge 600 ]; then
+      echo "ERR: could not acquire address allocator lock" >&2
+      exit 1
+    fi
+    sleep 0.05
+  done
+  trap 'rm -rf "$LOCK_DIR" 2>/dev/null' EXIT
 fi
 
 scan_max_c_address() {
