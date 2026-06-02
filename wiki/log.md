@@ -25,6 +25,14 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-06-01] ingest | GrantMe Claude Code Configuration
+- Source: `.raw/Grantme claude files/` (root CLAUDE.md + full `.claude/` tree: 4 agents, 4 commands, 6 rules, 5 docs, 4 agent-memory stores, settings, dev guide)
+- Summary: [[GrantMe Claude Code Configuration]]
+- Pages created: [[GrantMe]], [[Claude Code Project Configuration]], [[Claude Code Agent Memory Pattern]], [[Plan-Implement-Review Agent Workflow]]
+- Pages updated: [[index]], [[concepts/_index]], [[entities/_index]], [[sources/_index]], [[hot]]
+- Addresses: c-000003 (source) .. c-000007; counter advanced 3 -> 8
+- Key insight: A real-world `.claude/` kit is a concrete instance of this vault's own compounding-knowledge thesis. Always-loaded rules vs on-demand docs mirrors [[Hot Cache]]; per-agent `MEMORY.md` mirrors [[Compounding Knowledge]]. Note: `flock` is unavailable in this Git Bash env, so `allocate-address.sh` cannot run; addresses were reserved by replicating its logic via Bash (single-writer, no hand-edit of the counter via Write/Edit).
+
 ## [2026-06-01] maintenance | KB-layer refresh to v1.9.2
 - Type: meta reconciliation (no code change)
 - Reason: hot.md / index.md / log.md had drifted. They stopped tracking at v1.7.1 (2026-05-17) while the plugin shipped through v1.9.2 (public 2026-05-28). The plugin compounded; the wiki documenting the plugin fell behind.

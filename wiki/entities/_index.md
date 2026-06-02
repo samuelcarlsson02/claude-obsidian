@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Entities Index"
-updated: 2026-04-07
+updated: 2026-06-01
 tags:
   - meta
   - index
@@ -36,7 +36,7 @@ All entity pages — people, organizations, products, and tools.
 
 ## Products & Tools
 
-<!-- Add tool and product pages here -->
+- [[GrantMe]] — multi-tenant grant management SaaS for Swedish foundations (.NET 9 + React); subject of an ingested Claude Code configuration
 
 ---
 

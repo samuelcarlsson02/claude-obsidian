@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Concepts Index"
-updated: 2026-04-07
+updated: 2026-06-01
 tags:
   - meta
   - index
@@ -37,6 +37,14 @@ All concept pages — ideas, patterns, and frameworks extracted from sources.
 - [[Persistent Wiki Artifact]]: durable Markdown page as the LLM's memory object (developing)
 - [[Source-First Synthesis]]: provenance discipline for LLM wiki layers (developing)
 - [[Query-Time Retrieval]]: query synthesis with citations, complementary to Obsidian search (developing)
+
+---
+
+## Claude Code
+
+- [[Claude Code Project Configuration]] — the layered `.claude/` blueprint: always-loaded rules vs on-demand docs, agents, commands, the version-control boundary (developing)
+- [[Claude Code Agent Memory Pattern]] — persistent per-agent `MEMORY.md` that accumulates project gotchas across sessions (developing)
+- [[Plan-Implement-Review Agent Workflow]] — planner/engineer/reviewer agent triad gated by `/start-work` and `/finish-issue` commands (developing)
 
 ---
 

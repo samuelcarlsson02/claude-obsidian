@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-01T00:00:00
+updated: 2026-06-01T15:00:00
 tags:
   - meta
   - hot-cache
@@ -20,7 +20,13 @@ Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
 
-2026-06-01: **KB-layer refresh.** The wiki's own self-documentation had drifted: hot.md/index.md/log.md stopped tracking at v1.7.1 (2026-05-17) while the plugin shipped through v1.9.2. This pass reconciles them with git history. No code changed; only the meta layer (hot, index, log) was brought current.
+2026-06-01: **Ingested GrantMe Claude Code Configuration.** A complete real-world `.claude/` kit (root CLAUDE.md + 4 agents, 4 commands, 6 rules, 5 docs, 4 agent-memory stores) from the GrantMe SaaS (.NET 9 + React grant management for Swedish foundations, by LogicInjection). Created 4 pages: [[GrantMe]] (entity), [[Claude Code Project Configuration]], [[Claude Code Agent Memory Pattern]], [[Plan-Implement-Review Agent Workflow]]. Source summary at [[GrantMe Claude Code Configuration]]. This is the first source in the vault that is *about a different domain* yet directly exercises the vault's own theses: always-loaded rules vs on-demand docs mirrors [[Hot Cache]]; per-agent `MEMORY.md` mirrors [[Compounding Knowledge]].
+
+Earlier 2026-06-01: KB-layer refresh reconciled hot/index/log with git history up to v1.9.2 (no code change).
+
+## Environment Note
+
+`flock` is NOT available in this Git Bash environment (Git for Windows / MSYS2 ships no util-linux flock). This previously broke both `scripts/allocate-address.sh` and `scripts/wiki-lock.sh`. **Fixed 2026-06-01**: both now prefer flock when present and fall back to an atomic `mkdir` spinlock (age-based stale reaper, EXIT-trap release) when it is absent. `VAULT_LOCK_NO_FLOCK=1` forces the fallback for CI. The allocator works again here (counter at 8); no manual address-reservation workaround is needed anymore. All three lock/concurrency test suites pass natively and with the fallback forced.
 
 ## Plugin State
 
@@ -51,8 +57,8 @@ All four shipped and opt-in: (1) fold operator, (2) deterministic addresses (cou
 
 ## Active Threads
 
-- KB layer is now current as of v1.9.2 / 2026-06-01. Next ingest or release should append to log.md and overwrite this cache.
-- The vault tracks the plugin's own development plus the LLM Wiki pattern / Claude+Obsidian ecosystem. No new subject-matter concept pages since v1.6; v1.8/v1.9 work lives in skills, scripts, docs, and audit records.
+- KB layer current as of v1.9.2 / 2026-06-01. Next ingest or release should append to log.md and overwrite this cache.
+- The vault tracks the plugin's own development plus the LLM Wiki pattern / Claude+Obsidian ecosystem. As of 2026-06-01 it also holds a Claude Code config-engineering thread (the [[GrantMe]] ingest): see the three new "Claude Code" concepts in [[concepts/_index]]. Future ingests of other teams' `.claude/` kits would deepen this thread.
 
 ## Repo Locations
 

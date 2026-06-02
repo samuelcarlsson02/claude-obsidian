@@ -2,8 +2,34 @@
   "version": 1,
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
-  "sources": {},
+  "sources": {
+    ".raw/Grantme claude files/": {
+      "hash": "27691081a9dfdf06a5d9a9f69ab84498",
+      "hash_note": "aggregate md5 of all files in the folder (sorted)",
+      "ingested_at": "2026-06-01",
+      "pages_created": [
+        "wiki/sources/grantme-claude-config.md",
+        "wiki/entities/GrantMe.md",
+        "wiki/concepts/Claude Code Project Configuration.md",
+        "wiki/concepts/Claude Code Agent Memory Pattern.md",
+        "wiki/concepts/Plan-Implement-Review Agent Workflow.md"
+      ],
+      "pages_updated": [
+        "wiki/index.md",
+        "wiki/concepts/_index.md",
+        "wiki/entities/_index.md",
+        "wiki/sources/_index.md",
+        "wiki/log.md",
+        "wiki/hot.md"
+      ]
+    }
+  },
   "address_map": {
-    "wiki/concepts/DragonScale Memory.md": "c-000001"
+    "wiki/concepts/DragonScale Memory.md": "c-000001",
+    "wiki/sources/grantme-claude-config.md": "c-000003",
+    "wiki/entities/GrantMe.md": "c-000004",
+    "wiki/concepts/Claude Code Project Configuration.md": "c-000005",
+    "wiki/concepts/Claude Code Agent Memory Pattern.md": "c-000006",
+    "wiki/concepts/Plan-Implement-Review Agent Workflow.md": "c-000007"
   }
 }
