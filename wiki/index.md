@@ -23,7 +23,7 @@ related:
 
 # Wiki Index
 
-Last updated: 2026-06-01 | Total pages: 54 | Sources ingested: 3 | Plugin: v1.9.2 (public canonical)
+Last updated: 2026-06-05 | Total pages: 57 | Sources ingested: 4 | Plugin: v1.9.2 (public canonical)
 
 Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[getting-started]]
 
@@ -31,6 +31,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Concepts
 
+- [[Claude Code Permissions and Auto Mode]] — permission modes, auto-mode classifier, deny > ask > allow precedence, settings layering, three-tier git pattern (status: developing)
 - [[LLM Wiki Pattern]] — the pattern for building persistent, compounding knowledge bases using LLMs (status: mature)
 - [[Hot Cache]] — ~500-word session context file, updated after every ingest and session (status: mature)
 - [[Compounding Knowledge]] — why wiki knowledge grows more valuable over time, unlike RAG (status: mature)
@@ -60,7 +61,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 - [[kepano-obsidian-skills]] — official skills from Obsidian creator; defuddle, obsidian-bases (status: current)
 - [[Claudian-YishenTu]] — native Obsidian plugin embedding Claude Code; plan mode, @mention (status: current)
 - [[Claude SEO]] — Tier 4 Claude Code skill for SEO analysis; 23 skills, 17 agents, 30 scripts at v1.9.0 (status: evergreen)
-- [[GrantMe]] — multi-tenant grant management SaaS for Swedish foundations (.NET 9 + React); subject of an ingested Claude Code config (status: developing)
+- [[GrantMe]] — multi-tenant grant management SaaS for Swedish foundations (.NET 9 + React); subject of an ingested Claude Code config; includes local dev runbook (status: developing)
 
 ---
 
@@ -68,6 +69,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 - [[claude-obsidian-ecosystem-research]] — 2026-04-08 | web research across 16+ repos | 8 wiki pages created
 - [[GrantMe Claude Code Configuration]] — 2026-06-01 | complete `.claude/` project kit from the GrantMe SaaS | 4 wiki pages created
+- [[GrantMe Dev Database Snippets]] — 2026-06-04 | 5 dev snippets (T-SQL DB management + npm reset) | 1 page created, [[GrantMe]] runbook extended
 
 ---
 
@@ -86,6 +88,7 @@ Navigation: [[overview]] | [[log]] | [[hot]] | [[dashboard]] | [[Wiki Map]] | [[
 
 ## Decisions
 
+- [[2026-06-05-todo-skill-design]] - /todo quick-capture skill: skill+command split, one file per work item per project, single command + project registry over per-project commands (status: active)
 - [[2026-04-14-community-cta-rollout]] - Skool community CTA footer added to 6 skill repos with per-tool frequency rules (status: active)
 - [[2026-04-15-slides-and-release-session]] - Claude SEO v1.9.0 slides (15-slide HTML deck) + GitHub release v1.9.0 with PDF asset (status: complete)
 - [[2026-04-15-release-report-session]] - Claude SEO v1.9.0 Release Report PDF: dark theme, 13 pages, WeasyPrint layout fixes, Challenge v2 added (status: complete)

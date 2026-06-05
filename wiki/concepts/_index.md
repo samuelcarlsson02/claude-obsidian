@@ -42,6 +42,7 @@ All concept pages — ideas, patterns, and frameworks extracted from sources.
 
 ## Claude Code
 
+- [[Claude Code Permissions and Auto Mode]] — permission modes, the auto-mode classifier, deny > ask > allow precedence, settings layering, the three-tier git pattern (developing)
 - [[Claude Code Project Configuration]] — the layered `.claude/` blueprint: always-loaded rules vs on-demand docs, agents, commands, the version-control boundary (developing)
 - [[Claude Code Agent Memory Pattern]] — persistent per-agent `MEMORY.md` that accumulates project gotchas across sessions (developing)
 - [[Plan-Implement-Review Agent Workflow]] — planner/engineer/reviewer agent triad gated by `/start-work` and `/finish-issue` commands (developing)

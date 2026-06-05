@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Hot Cache"
-updated: 2026-06-01T15:00:00
+updated: 2026-06-05T12:00:00
 tags:
   - meta
   - hot-cache
@@ -19,6 +19,14 @@ related:
 Navigation: [[index]] | [[log]] | [[overview]]
 
 ## Last Updated
+
+2026-06-05 (latest): **Built the `/todo` quick-capture skill and saved [[2026-06-05-todo-skill-design]]** (decision, c-000010). `/todo [project] [id] <message>` appends Obsidian Tasks lines to one file per work item per project (`wiki/todos/<project>/WI-<id>.md`); queries read those files, `/todo done <fragment>` checks off. Multi-project via a registry (`wiki/todos/projects.md`: default `grantme`, `url_template` with `{id}`, aliases) chosen over per-project commands (`/todo-grantme`); `repo_path` reserved for future cwd auto-detect. Captures deliberately skip index/log/hot (a todo is not an ingest) and bypass the mode router (operational state, not knowledge). New skill #16; files: `.claude/skills/todo/SKILL.md`, `.claude/commands/todo.md`, `wiki/todos/` (filed under `.claude/` because the installed plugin loads from the upstream marketplace clone, not this working copy — root `skills/`/`commands/` placement only takes effect once merged upstream).
+
+Earlier 2026-06-04: **Batch-ingested [[GrantMe Dev Database Snippets]]** (c-000009): 5 tiny `.raw/` snippets filed as ONE combined source page. Four T-SQL scripts for the local `[Grantme]` SQL Server DB (backup/drop/restore, drop-only, rename-aside to `[GrantmeOld]`, seed 50 reviewer users into org `A69C09C8-…`) plus the cmd npm nuke-and-pave (`rmdir node_modules` / `del package-lock.json` / `npm cache clean --force` / `npm install`). Common primitive: `WITH ROLLBACK IMMEDIATE` kills open connections before drop/rename. [[GrantMe]] runbook extended with DB management + test-data + npm recovery subsections. Manifest now tracks all 5 files; counter at 10.
+
+Earlier 2026-06-04: **Updated [[GrantMe]] with a Local Development Commands runbook.** Backend `dotnet watch run --project Backend/Grantme.API`; four frontends via `npm start` (admin 3001, client, management 3003, www); `azurite` then `func start` in `Backend/Grantme.Functions`; trunk is `master` (`git pull origin master`, `git push -u origin HEAD`); recovery via `taskkill /F /IM dotnet.exe /T`. Repo root: `C:\Users\Samuel\Documents\Git Repositories\Grantme`.
+
+Earlier 2026-06-04: **Saved [[Claude Code Permissions and Auto Mode]]** (concept, c-000008). Permission modes incl. the auto-mode classifier, deny > ask > allow precedence with cross-file merging, the three-tier git pattern (allow `git *`, ask on destructive prefixes, deny force push), secrets-first deny lists, prefix-matching caveats. Source: a live consolidation of the [[GrantMe]] settings.local.json allowlist into global user settings. Extends the Claude Code config-engineering thread from the [[GrantMe Claude Code Configuration]] ingest.
 
 2026-06-01: **Ingested GrantMe Claude Code Configuration.** A complete real-world `.claude/` kit (root CLAUDE.md + 4 agents, 4 commands, 6 rules, 5 docs, 4 agent-memory stores) from the GrantMe SaaS (.NET 9 + React grant management for Swedish foundations, by LogicInjection). Created 4 pages: [[GrantMe]] (entity), [[Claude Code Project Configuration]], [[Claude Code Agent Memory Pattern]], [[Plan-Implement-Review Agent Workflow]]. Source summary at [[GrantMe Claude Code Configuration]]. This is the first source in the vault that is *about a different domain* yet directly exercises the vault's own theses: always-loaded rules vs on-demand docs mirrors [[Hot Cache]]; per-agent `MEMORY.md` mirrors [[Compounding Knowledge]].
 

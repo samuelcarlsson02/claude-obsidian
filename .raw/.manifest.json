@@ -3,6 +3,41 @@
   "created": "2026-04-23",
   "description": "Ingest delta tracker and address map for the claude-obsidian vault. Do not hand-edit; wiki-ingest maintains this.",
   "sources": {
+    ".raw/create backup, drop and restore db.txt": {
+      "hash": "b399cc414acfab8fff9a223bc0b48702",
+      "ingested_at": "2026-06-04",
+      "pages_created": ["wiki/sources/GrantMe-Dev-Database-Snippets.md"],
+      "pages_updated": ["wiki/entities/GrantMe.md", "wiki/index.md", "wiki/sources/_index.md", "wiki/log.md", "wiki/hot.md"],
+      "note": "batch-ingested with 4 sibling snippets into one combined source page"
+    },
+    ".raw/insert 50 org users.sql": {
+      "hash": "c4a174035646e49ce2ccb00ef6c5ba6e",
+      "ingested_at": "2026-06-04",
+      "pages_created": ["wiki/sources/GrantMe-Dev-Database-Snippets.md"],
+      "pages_updated": ["wiki/entities/GrantMe.md", "wiki/index.md", "wiki/sources/_index.md", "wiki/log.md", "wiki/hot.md"],
+      "note": "batch-ingested with 4 sibling snippets into one combined source page"
+    },
+    ".raw/kill con rename db.sql": {
+      "hash": "9a975f3e79dd2bc3878134934a4c6534",
+      "ingested_at": "2026-06-04",
+      "pages_created": ["wiki/sources/GrantMe-Dev-Database-Snippets.md"],
+      "pages_updated": ["wiki/entities/GrantMe.md", "wiki/index.md", "wiki/sources/_index.md", "wiki/log.md", "wiki/hot.md"],
+      "note": "batch-ingested with 4 sibling snippets into one combined source page"
+    },
+    ".raw/kill con reset db.sql": {
+      "hash": "33c834f29f83666f8be0fb217b96d2f4",
+      "ingested_at": "2026-06-04",
+      "pages_created": ["wiki/sources/GrantMe-Dev-Database-Snippets.md"],
+      "pages_updated": ["wiki/entities/GrantMe.md", "wiki/index.md", "wiki/sources/_index.md", "wiki/log.md", "wiki/hot.md"],
+      "note": "batch-ingested with 4 sibling snippets into one combined source page"
+    },
+    ".raw/reinstall npm dependencies.txt": {
+      "hash": "1b555411579425225df98d7891bf617b",
+      "ingested_at": "2026-06-04",
+      "pages_created": ["wiki/sources/GrantMe-Dev-Database-Snippets.md"],
+      "pages_updated": ["wiki/entities/GrantMe.md", "wiki/index.md", "wiki/sources/_index.md", "wiki/log.md", "wiki/hot.md"],
+      "note": "batch-ingested with 4 sibling snippets into one combined source page"
+    },
     ".raw/Grantme claude files/": {
       "hash": "27691081a9dfdf06a5d9a9f69ab84498",
       "hash_note": "aggregate md5 of all files in the folder (sorted)",
@@ -30,6 +65,8 @@
     "wiki/entities/GrantMe.md": "c-000004",
     "wiki/concepts/Claude Code Project Configuration.md": "c-000005",
     "wiki/concepts/Claude Code Agent Memory Pattern.md": "c-000006",
-    "wiki/concepts/Plan-Implement-Review Agent Workflow.md": "c-000007"
+    "wiki/concepts/Plan-Implement-Review Agent Workflow.md": "c-000007",
+    "wiki/concepts/Claude Code Permissions and Auto Mode.md": "c-000008",
+    "wiki/sources/GrantMe-Dev-Database-Snippets.md": "c-000009"
   }
 }

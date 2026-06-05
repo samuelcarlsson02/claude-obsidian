@@ -25,6 +25,36 @@ Parse recent entries: `grep "^## \[" wiki/log.md | head -10`
 
 ---
 
+## [2026-06-05] save | Todo Skill Design
+- Type: decision
+- Location: wiki/meta/2026-06-05-todo-skill-design.md
+- From: conversation building the /todo quick-capture skill (skill vs command, per-work-item files, multi-project registry design)
+- Pages created: [[2026-06-05-todo-skill-design]] (c-000010; counter advanced 10 -> 11). Non-wiki artifacts: skills/todo/SKILL.md, commands/todo.md, wiki/todos/projects.md, wiki/todos/_index.md
+- Pages updated: [[index]], [[hot]], CLAUDE.md (Plugin Skills table)
+- Key insight: a command alone covers capture but not natural-language query routing; the skill description in context is what makes "what do I have todo on work item 1000" resolve to wiki/todos/<project>/WI-<id>.md
+
+## [2026-06-04] ingest | GrantMe Dev Database Snippets (batch, 5 files)
+- Sources: `.raw/create backup, drop and restore db.txt`, `.raw/insert 50 org users.sql`, `.raw/kill con rename db.sql`, `.raw/kill con reset db.sql`, `.raw/reinstall npm dependencies.txt`
+- Summary: [[GrantMe Dev Database Snippets]] (one combined source page for 5 tiny snippets; editorial call to avoid 5 stub pages)
+- Pages created: [[GrantMe Dev Database Snippets]] (c-000009; counter advanced 9 -> 10)
+- Pages updated: [[GrantMe]] (§Local Development Commands: DB management, test-data seed, npm nuke-and-pave), [[index]], [[sources/_index]], [[hot]]
+- Key insight: three of the four SQL snippets share one primitive (`WITH ROLLBACK IMMEDIATE` to kill open connections before drop/rename); the 50-user seed script demonstrates the Organisation-as-tenant model concretely (a `[Users]` row is invisible until `[OrganisationUsers]` scopes it).
+
+## [2026-06-04] save | GrantMe Local Development Commands
+- Type: entity update (runbook section added to existing page)
+- Location: wiki/entities/GrantMe.md §Local Development Commands
+- From: conversation listing the user's day-to-day GrantMe dev commands
+- Pages updated: [[index]], [[hot]]
+- Content: backend `dotnet watch run --project Backend/Grantme.API`; four frontend `npm start` apps (admin 3001, client, management 3003, www); `azurite` + `func start` for Grantme.Functions; `git pull origin master` / `git push -u origin HEAD` (trunk is master); `taskkill /F /IM dotnet.exe /T` recovery
+
+## [2026-06-04] save | Claude Code Permissions and Auto Mode
+- Type: concept
+- Location: wiki/concepts/Claude Code Permissions and Auto Mode.md
+- From: conversation on Claude Code auto mode, permission rule precedence, and consolidating the GrantMe settings.local.json allowlist into global user settings
+- Pages updated: [[index]], [[concepts/_index]], [[hot]]
+- Address: c-000008; counter advanced 8 -> 9 (allocator native, no workaround)
+- Key insight: deny > ask > allow with cross-file merging means the `ask` tier is the missing middle for destructive-but-sometimes-legitimate commands (git reset --hard, git clean). Auto mode strips blanket allow rules and runs a classifier as a second gate after the permissions system.
+
 ## [2026-06-01] ingest | GrantMe Claude Code Configuration
 - Source: `.raw/Grantme claude files/` (root CLAUDE.md + full `.claude/` tree: 4 agents, 4 commands, 6 rules, 5 docs, 4 agent-memory stores, settings, dev guide)
 - Summary: [[GrantMe Claude Code Configuration]]

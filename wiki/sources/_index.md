@@ -1,7 +1,7 @@
 ---
 type: meta
 title: "Sources Index"
-updated: 2026-06-01
+updated: 2026-06-04
 tags:
   - meta
   - index
@@ -42,6 +42,7 @@ All source pages — summaries of ingested documents, transcripts, articles, and
 ## Data & Configuration
 
 - [[GrantMe Claude Code Configuration]] — 2026-06-01 | a complete `.claude/` project kit (agents, commands, rules, docs, agent-memory) from the GrantMe SaaS | 4 wiki pages created
+- [[GrantMe Dev Database Snippets]] — 2026-06-04 | 5 dev snippets (4 T-SQL DB management + npm reset) batch-ingested as one page; runbook on [[GrantMe]] updated
 
 ---
 

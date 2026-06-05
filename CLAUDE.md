@@ -57,6 +57,7 @@ Do NOT read the wiki for general coding questions or things already in this proj
 | `/save` | File the current conversation as a structured wiki note |
 | `/autoresearch [topic]` | Autonomous research loop: search, fetch, synthesize, file |
 | `/canvas` | Visual layer: add images, PDFs, notes to Obsidian canvas |
+| `/todo` | Quick-capture todos tied to work items across registered projects: `/todo 1000 add button` adds to the default project, `/todo myapp 42 fix login` targets another, `/todo 1000` lists, `/todo done 1000 <fragment>` completes. Registry + default: `wiki/todos/projects.md`; storage: `wiki/todos/<project>/WI-<id>.md` |
 | `/wiki-cli` (v1.7) | Obsidian CLI transport wrapper; default mutation path on desktop |
 | `/wiki-retrieve` (v1.7) | Hybrid contextual + BM25 + cosine-rerank retrieval (opt-in via `bash bin/setup-retrieve.sh`) |
 | `/wiki-mode` (v1.8) | Methodology modes (LYT / PARA / Zettelkasten / Generic). Set via `bash bin/setup-mode.sh`; consumed by wiki-ingest / save / autoresearch for routing new pages |

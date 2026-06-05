@@ -2,7 +2,7 @@
 type: entity
 title: "GrantMe"
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-06-04
 address: c-000004
 tags:
   - entity
@@ -16,6 +16,7 @@ role: "Multi-tenant grant management SaaS for Swedish foundations"
 first_mentioned: "[[GrantMe Claude Code Configuration]]"
 related:
   - "[[GrantMe Claude Code Configuration]]"
+  - "[[GrantMe Dev Database Snippets]]"
   - "[[Claude Code Project Configuration]]"
   - "[[Plan-Implement-Review Agent Workflow]]"
   - "[[Claude Code Agent Memory Pattern]]"
@@ -67,6 +68,74 @@ These read as a catalog of the team's most common bugs. See [[Claude Code Projec
 - **Frontend**: React hooks at top level only; no `any` / no double-cast; stable list keys; Mantine v8 DatePicker uses `string | null` not `Date`; `NumberSelect` for enum fields; LiitGrid always sets `startSort`/`startSortOrder` and follows the List + Columns file pattern; files kept under ~300 lines.
 - **Dark mode (admin)**: never hardcode colors; use `var(--app-*)` CSS variables and shade-less button colors.
 - **i18n**: Swedish default in code via ttag; English in `i18n/en.po`. New admin files need manual `en.po` entries (see [[Claude Code Agent Memory Pattern]]).
+
+## Local Development Commands (runbook)
+
+The day-to-day commands for running GrantMe locally on Windows. Repo root: `C:\Users\Samuel\Documents\Git Repositories\Grantme`. Each long-running process gets its own terminal.
+
+**Backend API** (hot reload, from repo root):
+
+```powershell
+cd "Documents\Git Repositories\Grantme"
+dotnet watch run --project Backend/Grantme.API
+```
+
+**Frontends** (one terminal each):
+
+```powershell
+cd "Documents\Git Repositories\Grantme\Frontend\admin";      npm start   # port 3001
+cd "Documents\Git Repositories\Grantme\Frontend\client";     npm start
+cd "Documents\Git Repositories\Grantme\Frontend\management"; npm start   # port 3003
+cd "Documents\Git Repositories\Grantme\Frontend\www";        npm start
+```
+
+**Background jobs** (Azure Functions, needs the storage emulator running):
+
+```powershell
+azurite                                              # storage emulator first
+cd "Documents\Git Repositories\Grantme\Backend\Grantme.Functions"
+func start
+```
+
+**Git** (trunk is `master`):
+
+```powershell
+git pull origin master
+git push -u origin HEAD
+```
+
+**Database management** (T-SQL against the local `[Grantme]` SQL Server DB; full scripts and notes in [[GrantMe Dev Database Snippets]]). SQL Server won't drop/rename a DB with open connections, so every variant starts by killing them via `WITH ROLLBACK IMMEDIATE`:
+
+```sql
+-- Reset with safety net: backup -> bounce connections -> drop -> (later) restore
+BACKUP DATABASE [Grantme] TO DISK = 'C:\Users\Samuel\Documents\Grantme\Dev\backups db\Grantme_backup.bak' WITH FORMAT;
+ALTER DATABASE [Grantme] SET OFFLINE WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE [Grantme] SET ONLINE;
+DROP DATABASE [Grantme];
+RESTORE DATABASE [Grantme] FROM DISK = 'C:\Users\Samuel\Documents\Grantme\Dev\backups db\Grantme_backup.bak';
+
+-- Rename aside instead of dropping (keeps old data inspectable as [GrantmeOld])
+ALTER DATABASE [Grantme] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+ALTER DATABASE [Grantme] MODIFY NAME = [GrantmeOld];
+ALTER DATABASE [GrantmeOld] SET MULTI_USER;
+```
+
+**Test data** — seed 50 reviewer users (`Granskare{i} Testsson{i}`, `reviewer{i}@test.grantme.se`) into org `A69C09C8-1451-4C7D-9417-49B70C2D6AAA`; see [[GrantMe Dev Database Snippets]] §4 for the loop and field choices.
+
+**Recovery** — kill stuck/orphaned dotnet processes (e.g. when `dotnet watch` leaves children holding build outputs):
+
+```powershell
+taskkill /F /IM dotnet.exe /T
+```
+
+Nuke-and-pave a broken `node_modules` in any frontend app (re-resolves versions since the lockfile is deleted):
+
+```bat
+rmdir /s /q node_modules
+del package-lock.json
+npm cache clean --force
+npm install
+```
 
 ## Known Production-Readiness Gaps (from reviewer agent memory)
 
